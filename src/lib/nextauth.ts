@@ -6,7 +6,7 @@ import { getToken } from "next-auth/jwt";
 import GoogleProvider from 'next-auth/providers/google';
 
 declare module 'next-auth' {
-    interface Session extends DefaultSession{
+    interface Session extends DefaultSession {
         user: {
             id: string;
         } & DefaultSession['user']
@@ -52,4 +52,7 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
         })
     ],
+}
+export const getAuthSession = () => {
+    return geServerSession(authOptiones);
 }
