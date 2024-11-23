@@ -10,9 +10,11 @@ type Props = {
 
 const SignInButton = ({text}: Props) => {
   return (
-    <Button onClick={()=> {
+    <Button
+      onClick={()=> {
         signIn('google').catch(console.error);
-    }}>
+      }}
+    >
         {text}
     </Button>
   );
