@@ -2,7 +2,7 @@ import { prisma } from "@/lib/db";
 import { checkAnswerSchema } from "@/schemas/questions";
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import stringSimilarity from "string-similarity";
+import  compareTwoStrings  from 'string-similarity-js';
 
 export async function POST(req: Request, res: Response) {
     try {
@@ -36,7 +36,7 @@ export async function POST(req: Request, res: Response) {
                 isCorrect,
             });
         } else if (question.questionType === "open_ended") {
-            let percentageSimilar = stringSimilarity.compareTwoStrings(
+            let percentageSimilar = compareTwoStrings(
                 question.answer.toLowerCase().trim(),
                 userInput.toLowerCase().trim()
             );
@@ -44,7 +44,7 @@ export async function POST(req: Request, res: Response) {
             await prisma.question.update({
                 where: { id: questionId },
                 data: { percentageCorrect: percentageSimilar },
-            });
+            });        
             return NextResponse.json({
                 percentageSimilar,
             });

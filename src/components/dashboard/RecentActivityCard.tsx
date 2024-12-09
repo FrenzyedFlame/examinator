@@ -21,7 +21,7 @@ const RecentActivityCard = async (props: Props) => {
   }
   const games_count = await prisma.game.count ({
     where: {
-        userID: session.user.id,
+        userId: session.user.id,
     }
   })
   /*const games_count = await prisma.game.count({

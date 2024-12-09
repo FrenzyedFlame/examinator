@@ -1,61 +1,77 @@
-import React from 'react'
-import { Question } from "@prisma/client"
-import { Table , TableCaption, TableCell , TableBody, TableHead, TableHeader , TableRow,} from "../ui/table";
+"use client";
+import React from "react";
 
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Question } from "@prisma/client";
 type Props = {
-questions: Question[];   
-}
+  questions: Question[];
+};
 
-const QuestinList = ({questions} : Props) => {
-  let gameType = questions[0].questionType;
+const QuestionsList = ({ questions }: Props) => {
   return (
     <Table className="mt-4">
+      <TableCaption>End of list.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[10px]">no.</TableHead>
-          <TableHead>Question & Correct Answer</TableHead> 
+          <TableHead className="w-[10px]">No.</TableHead>
+          <TableHead>Question & Correct Answer</TableHead>
           <TableHead>Your Answer</TableHead>
-          {gameType === "open_ended"&&(
+
+          {questions[0].questionType === "open_ended" && (
             <TableHead className="w-[10px] text-right">Accuracy</TableHead>
           )}
         </TableRow>
       </TableHeader>
       <TableBody>
-          <>
-          {questions.map((question, index) => {
-            return (
-            <TableRow key={question.id}>
-              <TableCell className="font-medium">{index + 1}</TableCell>
-              <TableCell>
-                {question.question}
-                <br/>
-                <br/>
-                <span className="font-semibold">{question.answer}</span>
-              </TableCell>
-              {gameType === "mcq"&&(
-                <TableCell className={cn({
-                  "text-green-600:":question.isCorret,
-                  "text-red-600": !question.isCorret,
-                })}
-                >
-                  {question.userAnswer}
-                </TableCell>
-              )}
-              {gameType === "opend_ended" &&(
-                <TableCell>{question.userAnswer}</TableCell>
-              )}
-              {gameType === "open_ended" &&(
-                <TableCell className="text-right">
-                  {question.userAnswer}</TableCell>
-              )}
-            </TableRow>
-            );
-          })}
-          </>
+        <>
+          {questions.map(
+            (
+              { answer, question, userAnswer, percentageCorrect, isCorrect },
+              index
+            ) => {
+              return (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{index + 1}</TableCell>
+                  <TableCell>
+                    {question} <br />
+                    <br />
+                    <span className="font-semibold">{answer}</span>
+                  </TableCell>
+                  {questions[0].questionType === "open_ended" ? (
+                    <TableCell className={`font-semibold`}>
+                      {userAnswer}
+                    </TableCell>
+                  ) : (
+                    <TableCell
+                      className={`${
+                        isCorrect ? "text-green-600" : "text-red-600"
+                      } font-semibold`}
+                    >
+                      {userAnswer}
+                    </TableCell>
+                  )}
+
+                  {percentageCorrect && (
+                    <TableCell className="text-right">
+                      {percentageCorrect}
+                    </TableCell>
+                  )}
+                </TableRow>
+              );
+            }
+          )}
+        </>
       </TableBody>
     </Table>
-    
   );
-}
+};
 
-export default QuestinList
+export default QuestionsList;
